@@ -6,7 +6,11 @@
   :author "David Krentzlin <david.krentzlin@gmail.com>"
   :maintainer "David Krentzlin <david.krentzlin@gmail.com>"
   :source-control (:git "https://github.com/certainty/VacayGenius.git")
-  :depends-on (:alexandria :serapeum :classowary)
+  :depends-on
+  (:alexandria
+   :serapeum
+   :screamer
+   :local-time)
   :components
   ((:module "src"
     :serial t

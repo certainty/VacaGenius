@@ -5,4 +5,4 @@
   (:import-from :serapeum :->)
   (:local-nicknames (:a :alexandria)
                     (:s :serapeum)
-                    (:cass :org.shirakumo.classowary)))
+                    (:csp :screamer)))
