@@ -79,6 +79,13 @@
         :when (blockedp day)
           :collect i))
 
+(defun possible-vacation-day-indices (schedule-range)
+  "Returns the indices of the days that can be used for vacation in the given range."
+  (loop :for day :across (scheduling-range-days schedule-range)
+        :for i :from 0
+        :when (not (blockedp day))
+          :collect i))
+
 (screamer::defun compute-schedules* (schedule-range)
   "Compute all possible schedules for the given range."
   (let* ((day-vars (loop :for day :across (scheduling-range-days schedule-range)
@@ -86,9 +93,13 @@
                          :collect var :into vars
                          :finally (return (coerce vars 'vector)))))
 
-    ;; constrain the blocked days
+    ;; constrain blocked days
     (loop :for idx :in (blocked-day-indices schedule-range)
-          :do (csp:assert! (csp:=v  (aref day-vars idx) +day-blocked+)))
+          :do (csp:assert! (csp:=v (aref day-vars idx) +day-blocked+)))
+
+    (loop :for idx :in (possible-vacation-day-indices schedule-range)
+          :do (csp:assert! (csp:orv (csp:=v (aref day-vars idx) +day-free+)
+                                    (csp:=v (aref day-vars idx) +day-vacation+))))
 
     ;; TODO: refactor this niceley
     (let* ((day-vars-ls (coerce day-vars 'list))
